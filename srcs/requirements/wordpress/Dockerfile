@@ -1,3 +1,5 @@
-FROM scratch
-RUN apt update
-RUN apt install -y wordpress
+FROM alpine
+
+RUN apk update
+RUN apk install -y wordpress
+
