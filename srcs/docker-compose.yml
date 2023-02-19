@@ -1,18 +1,22 @@
 version: "2.12.2"
 
 services:
-  # e.g. service:
-  #   build: /path/to/dockerfile
-  #   image: specify docker image 
   mariadb:
-    build: ./requirements/mariadb
+    build: ./requirements/mariadb/
     image: mariadb
+    restart: unless_stopped
   wordpress:
-    build: ./requirements/wordpress
+    build: ./requirements/wordpress/
     image: wordpress
+    restart: unless_stopped
+    depends_on: mariadb
   nginx:
-    build: ./requirements/nginx
+    build: ./requirements/nginx/
     image: nginx
+    restart: unless_stopped
+
   # ftp:
-  #   build: ./requirements/bonus/ftp
+  #   build: ./requirements/bonus/ftp/
   #   image: ftp
+  #   restart: unless_stopped
+  
