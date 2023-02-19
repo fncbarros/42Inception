@@ -1,0 +1,24 @@
+docker compose:
+    - Stop all containers and remove volumes: docker compose down -v
+
+docker:
+    - List all containers and display only IDs: docker ps -q (or --quiet)
+    - Stop all containers: docker stop $(docker ps -qa)
+    - Remove all images: docker rmi $(docker images)
+    - Remove all unused containers: docker rm $(docker ps -qa)
+    - Remove all unused volumes: docker volume rm $(docker volume ls -q)
+    - Remove all unused networks: docker network rm $(docker network ls -q) 2> /dev/null
+    - Remove all unused data: docker system prune -a --volumes
+
+docker-compose.yml:
+
+services:
+   service:
+   build: /path/to/dockerfile
+   image: specify docker image
+   restart: specify what to do if container crashes
+   networks:	what network should the	container be a part of
+   volumes:
+	- path/to/disk/folder:path/to/container/folder:<permission_specification(optional)> (permissions: ro(read-o\
+nly); rw(read-write))
+
