@@ -3,25 +3,21 @@ version: "3"
 services:
  db:
   build: ./requirements/mariadb/
-  image: mariadb:42
+  image: inception-mariadb:42
   restart: always
   env_file:
    - .env
  wordpress:
   build: ./requirements/wordpress/
-  image: wordpress:42
+  image: inception-wp:42
   restart: always
   depends_on:
    - db
+  ports:
+    - "9000:9000"
  nginx:
   build: ./requirements/nginx/
-  image: nginx:42
+  image: inception-nginx:42
   restart: always
   depends_on:
    - wordpress
-
-  # ftp:
-  #   build: ./requirements/bonus/ftp/
-  #   image: ftp
-  #   restart: unless_stopped
-  

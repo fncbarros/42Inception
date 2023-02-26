@@ -1,5 +1,5 @@
-FROM alpine
+FROM debian:buster
 
-RUN apk update
-RUN apk install -y wordpress
+RUN apt update
+RUN apt install -y wordpress
 
