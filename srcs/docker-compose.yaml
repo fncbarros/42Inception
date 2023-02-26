@@ -7,6 +7,10 @@ services:
   restart: always
   env_file:
    - .env
+  ports:
+   - "3306:3306"
+  volumes:
+   - /var/lib/mysql
  wordpress:
   build: ./requirements/wordpress/
   image: inception-wp:42
@@ -15,9 +19,17 @@ services:
    - db
   ports:
     - "9000:9000"
+  volumes:
+   - /var/lib/www
  nginx:
   build: ./requirements/nginx/
   image: inception-nginx:42
   restart: always
   depends_on:
    - wordpress
+  ports:
+   - "443:443"
+
+#volumes:
+#  - mariadb: /var/lib/mysql
+#  - wp: /var/www/html
