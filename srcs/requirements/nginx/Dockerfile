@@ -2,7 +2,6 @@ FROM debian:buster
 
 ENV PORT=443
 EXPOSE 443
-EXPOSE 9000
 
 WORKDIR ${HOME}
 

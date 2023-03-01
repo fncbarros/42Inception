@@ -22,3 +22,51 @@ services:
 	- path/to/disk/folder:path/to/container/folder:<permission_specification(optional)> (permissions: ro(read-o\
 nly); rw(read-write))
 
+
+ports:
+ - "443:443"
+    or
+ - "127.0.0.1:443:443"
+
+Specify both ports (HOST:CONTAINER),
+specify just the container port (an ephemeral host port is chosen for the host port).
+or specify the host IP address to bind to AND both ports (the default is 0.0.0.0, meaning all interfaces): (IPADDR:HOSTPORT:CONTAINERPORT). If HOSTPORT is empty (for example 127.0.0.1::80), an ephemeral port is chosen to bind to on the host.
+
+Long form
+ports:
+
+  - target: 443     the port inside the container
+    published: 443  the publicly exposed port
+    protocol: tcp   the port protocol (tcp or udp)
+    mode: host      host for publishing a host port on each node, or ingress for a swarm mode port to be load balanced.
+
+
+multi-stage build example:
+# syntax=docker/dockerfile:1
+FROM golang:1.16-alpine AS build
+
+# Install tools required for project
+# Run `docker build --no-cache .` to update dependencies
+RUN apk add --no-cache git
+RUN go get github.com/golang/dep/cmd/dep
+
+# List project dependencies with Gopkg.toml and Gopkg.lock
+# These layers are only re-built when Gopkg files are updated
+COPY Gopkg.lock Gopkg.toml /go/src/project/
+WORKDIR /go/src/project/
+# Install library dependencies
+RUN dep ensure -vendor-only
+
+# Copy the entire project and build it
+# This layer is rebuilt when a file changes in the project directory
+COPY . /go/src/project/
+RUN go build -o /bin/project
+
+# This results in a single layer image
+FROM scratch
+COPY --from=build /bin/project /bin/project
+ENTRYPOINT ["/bin/project"]
+CMD ["--help"]
+
+
+
