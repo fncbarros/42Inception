@@ -1,36 +1,29 @@
 version: "3"
 
 services:
- db:
-  build: ./requirements/mariadb/
-  image: inception-mariadb:42
+ database:
+  container_name: mariadb
+  # build: ./requirements/mariadb/
+  # image: database:42
+  image: mariadb
   restart: always
   env_file:
    - .env
-  ports:
-   - "3306:3306"
-  volumes: db-volume
- wordpress:
-  build: ./requirements/wordpress/
-  image: inception-wp:42
+ website:
+  container_name: wordpress
+  # build: ./requirements/wordpress/
+  # image: website:42
+  image: wordpress
   restart: always
   depends_on:
    - db
-  ports:
-    - "9000:9000"
-  volumes: wp-volume
- nginx:
-  build: ./requirements/nginx/
-  image: inception-nginx:42
+ server:
+  container_name: nginx
+  # build: ./requirements/nginx/
+  # image: server:42
+  image: nginx
   restart: always
   depends_on:
    - wordpress
   ports:
    - "443:443"
-
-volumes:
-  mariadb: 
-    name: db-volume
-    
-  wordpress: 
-    name: wp-volume

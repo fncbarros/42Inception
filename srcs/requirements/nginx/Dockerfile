@@ -1,12 +1,12 @@
 FROM debian:buster
 
-ENV PORT=443
+# tmp
 EXPOSE 443
 
-WORKDIR ${HOME}
+WORKDIR /home
 
 RUN apt update
 RUN apt install -y nginx
 
 RUN echo "Starting NGINX"
-CMD ["nginx"]
+CMD ["nginx", "-g  daemon off;"]
