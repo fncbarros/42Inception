@@ -41,7 +41,7 @@ ports:
     mode: host      host for publishing a host port on each node, or ingress for a swarm mode port to be load balanced.
 
 
-multi-stage build example:
+Multi-stage build example:
 # syntax=docker/dockerfile:1
 FROM golang:1.16-alpine AS build
 
@@ -68,5 +68,10 @@ COPY --from=build /bin/project /bin/project
 ENTRYPOINT ["/bin/project"]
 CMD ["--help"]
 
+Although ADD and COPY are functionally similar, generally speaking, COPY is preferred. That’s because it’s more transparent than ADD.
+COPY only supports the basic copying of local files into the container, while ADD has some features (like local-only tar extraction and remote URL support) that are not immediately obvious.
+Consequently, the best use for ADD is local tar file auto-extraction into the image, as in ADD rootfs.tar.xz /.
 
+If you have multiple Dockerfile steps that use different files from your context, COPY them individually, rather than all at once.
+This ensures that each step’s build cache is only invalidated, forcing the step to be re-run if the specifically required files change.
 

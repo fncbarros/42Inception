@@ -8,5 +8,7 @@ WORKDIR /home
 RUN apt update
 RUN apt install -y nginx
 
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
 RUN echo "Starting NGINX"
 CMD ["nginx", "-g  daemon off;"]
