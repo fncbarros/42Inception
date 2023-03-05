@@ -1,17 +1,9 @@
-docker compose:
-    - Stop all containers and remove volumes: docker compose down -v
+***************************************************** DOCKER-COMPOSE *****************************************************
 
-docker:
-    - List all containers and display only IDs: docker ps -q (or --quiet)
-    - Stop all containers: docker stop $(docker ps -qa)
-    - Remove all images: docker rmi $(docker images)
-    - Remove all unused containers: docker rm $(docker ps -qa)
-    - Remove all unused volumes: docker volume rm $(docker volume ls -q)
-    - Remove all unused networks: docker network rm $(docker network ls -q) 2> /dev/null
-    - Remove all unused data: docker system prune -a --volumes
+    -> Stop all containers and remove volumes: docker compose down -v
 
+---------------------------------------------------
 docker-compose.yml:
-
 services:
    service:
    build: /path/to/dockerfile
@@ -23,6 +15,16 @@ services:
 nly); rw(read-write))
 
 
+***************************************************** DOCKER *****************************************************
+    - List all containers and display only IDs: docker ps -q (or --quiet)
+    - Stop all containers: docker stop $(docker ps -qa)
+    - Remove all images: docker rmi $(docker images)
+    - Remove all unused containers: docker rm $(docker ps -qa)
+    - Remove all unused volumes: docker volume rm $(docker volume ls -q)
+    - Remove all unused networks: docker network rm $(docker network ls -q) 2> /dev/null
+    - Remove all unused data: docker system prune -a --volumes
+
+---------------------------------------------------
 ports:
  - "443:443"
     or
@@ -40,7 +42,11 @@ ports:
     protocol: tcp   the port protocol (tcp or udp)
     mode: host      host for publishing a host port on each node, or ingress for a swarm mode port to be load balanced.
 
+---------------------------------------------------
+expose: Expose ports without publishing them to the host
+machine - they’ll only be accessible to linked services. Only the internal port can be specified.
 
+---------------------------------------------------
 Multi-stage build example:
 # syntax=docker/dockerfile:1
 FROM golang:1.16-alpine AS build
@@ -68,10 +74,80 @@ COPY --from=build /bin/project /bin/project
 ENTRYPOINT ["/bin/project"]
 CMD ["--help"]
 
-Although ADD and COPY are functionally similar, generally speaking, COPY is preferred. That’s because it’s more transparent than ADD.
-COPY only supports the basic copying of local files into the container, while ADD has some features (like local-only tar extraction and remote URL support) that are not immediately obvious.
-Consequently, the best use for ADD is local tar file auto-extraction into the image, as in ADD rootfs.tar.xz /.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Although ADD and COPY are functionally similar, generally 
+speaking, COPY is preferred. That’s because it’s more transparent than ADD.
+COPY only supports the basic copying of local files into the container, while ADD has 
+some features (like local-only tar extraction and remote URL support) that are not immediately obvious.
+Consequently, the best use for ADD is local tar file 
+auto-extraction into the image, as in ADD rootfs.tar.xz /.
 
-If you have multiple Dockerfile steps that use different files from your context, COPY them individually, rather than all at once.
-This ensures that each step’s build cache is only invalidated, forcing the step to be re-run if the specifically required files change.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+If you have multiple Dockerfile steps that use different files 
+from your context, COPY them individually, rather than all at once.
+This ensures that each step’s build cache is only invalidated, forcing the
+step to be re-run if the specifically required files change.
 
+
+***************************************************** NGINX *****************************************************
+
+nginx.conf located at /etc/nginx
+
+---------------------------------------------------
+events {
+}
+ is mandatory
+
+---------------------------------------------------
+http {
+    server {
+        listen 443;
+
+    location / {
+        ...;
+    }
+    }
+}
+---------------------------------------------------
+    # passing requests to proxied server
+    location / {
+        proxy_pass http://localhost:80;
+    }
+
+	# proxied server
+    server {
+        listen 80;
+        root /data/up1;
+
+        location / {
+        }
+    }
+
+---------------------------------------------------
+    # what you might want to do
+    location / {
+        proxy_pass http://php:9000;
+    }
+
+---------------------------------------------------
+# nginx can be used to route requests to FastCGI servers which run applications
+# built with various frameworks and programming languages such as PHP.
+
+    # location [modifier(=|~|~*|...)] [URI (/|/images/)] {...}
+    location / {
+        fastcgi_pass localhost:9000;
+        # SCRIPT_FILENAME PHP parameter to determine script name
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        # QUERY_STRING PHP parameter used to pass request parameters
+        fastcgi_param QUERY_STRING    $query_string;
+    }
+
+    # regex matching all URIs ending with .jpg, or .png. All regex are preceded by ~.
+	# This server will filter requests ending with .jpg, or .png and map them to 
+	# the /data/images directory (by adding URI to the root directive’s parameter)
+	# and pass all other requests to the proxied server configured above. 
+	location ~\.(jpg|png)$ {
+		root /data/images;
+		}
+
+----------------------------------------------------
