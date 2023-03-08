@@ -90,8 +90,9 @@ step to be re-run if the specifically required files change.
 
 
 ***************************************************** NGINX *****************************************************
+https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/
 
-nginx.conf located at /etc/nginx
+/etc/nginx/nginx.conf
 
 ---------------------------------------------------
 events {
@@ -149,5 +150,34 @@ http {
 	location ~\.(jpg|png)$ {
 		root /data/images;
 		}
+---------------------------------------------------
+Relevant files:
+ - /etc/nginx/nginx.conf
+ - /etc/hosts --> add "127.0.0.1 user.42.fr"
+ - /etc/nginx/sites-enabled/default
 
-----------------------------------------------------
+
+..................... SSL/TLS ...........................
+La TLS (ou SSL) fonctionne suivant un mode client-serveur. Il permet de satisfaire les objectifs de sécurité suivants :
+
+ - l'authentification du serveur ;
+ - la confidentialité des données échangées (ou session chiffrée) ;
+ - l'intégrité des données échangées ;
+ - de manière optionnelle, l'authentification du client ;
+
+-----------------------------------------------------
+https://sectigo.com/resource-library/what-is-a-self-signed-certificate
+
+- A self-signed SSL certificate is a digital certificate that’s not signed/validated by a publicly trusted Certificate Authority.
+- Generally used in internal testing environments or web servers that are otherwise locked down to external users.
+- They do not expire or need to be renewed, therefore they cannot comply with security updates in response to discovered vulnerabilities.
+- Whenever a user visits a site that is using this certificate type, they will be prompted immediately with a security pop-up warning displaying errors like 
+    “error_self_signed_cert” or “err_cert_authority_invalid” that require the user to confirm that they would like to proceed.
+
+https://linuxize.com/post/creating-a-self-signed-ssl-certificate/
+
+ - To create the SSL certificate both a private key file and a certificate signing request (CSR) are necessary.
+
+..................... php ...........................
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-20-04
+
