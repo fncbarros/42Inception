@@ -3,12 +3,14 @@ FROM debian:buster
 # tmp
 EXPOSE 443
 
-# WORKDIR /home
+WORKDIR /etc/nginx
 
 RUN apt update
-RUN apt install -y nginx openssl
+RUN apt install -yq nginx openssl
 
-COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY ./tools/entrypoint.sh /usr/local/bin
 
-RUN echo "Starting NGINX"
+ENTRYPOINT ["entrypoint.sh"]
+
 CMD ["nginx", "-g  daemon off;"]
