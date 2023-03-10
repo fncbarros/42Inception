@@ -14,16 +14,6 @@ services:
 	- path/to/disk/folder:path/to/container/folder:<permission_specification(optional)> (permissions: ro(read-o\
 nly); rw(read-write))
 
-
-***************************************************** DOCKER *****************************************************
-    - List all containers and display only IDs: docker ps -q (or --quiet)
-    - Stop all containers: docker stop $(docker ps -qa)
-    - Remove all images: docker rmi $(docker images)
-    - Remove all unused containers: docker rm $(docker ps -qa)
-    - Remove all unused volumes: docker volume rm $(docker volume ls -q)
-    - Remove all unused networks: docker network rm $(docker network ls -q) 2> /dev/null
-    - Remove all unused data: docker system prune -a --volumes
-
 ---------------------------------------------------
 ports:
  - "443:443"
@@ -45,6 +35,17 @@ ports:
 ---------------------------------------------------
 expose: Expose ports without publishing them to the host
 machine - they’ll only be accessible to linked services. Only the internal port can be specified.
+
+***************************************************** DOCKER *****************************************************
+    - List all containers and display only IDs: docker ps -q (or --quiet)
+    - Stop all containers: docker stop $(docker ps -qa)
+    - Remove all images: docker rmi $(docker images)
+    - Remove all unused containers: docker rm $(docker ps -qa)
+    - Remove all unused volumes: docker volume rm $(docker volume ls -q)
+    - Remove all unused networks: docker network rm $(docker network ls -q) 2> /dev/null
+    - Remove all unused data: docker system prune -a --volumes
+
+***************************************************** Dockerfile *****************************************************
 
 ---------------------------------------------------
 Multi-stage build example:
@@ -88,6 +89,29 @@ from your context, COPY them individually, rather than all at once.
 This ensures that each step’s build cache is only invalidated, forcing the
 step to be re-run if the specifically required files change.
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+The main purpose of a CMD is to provide defaults for an executing container. 
+These defaults can include an executable, or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
+
+An ENTRYPOINT allows you to configure a container that will run as an executable.
+
+Command line arguments to docker run <image> will be appended after all elements in an exec form ENTRYPOINT, and will override all elements specified using CMD
+
+You can override the ENTRYPOINT instruction using the docker run --entrypoint flag.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Adding "exec $@" at the end of your dockerfile-entrypoint.sh:
+- $@" in list contexts expands to all the positional parameters{$1, $2, ...} as separate arguments.
+- "exec" will replace the parent process
+
+This is important so signals can be forwarded correctly.
+If a container starts without exec, it might not receive a SIGTERM when the docker stop is run
+and will not get a chance to shutdown cleanly. In some cases, this can lead to data loss or zombie processes.
+
+If you do start child processes (i.e. don't use exec), the parent process becomes responsible for
+handling and forwarding signals as appropriate. This is one of the reasons it's best to use supervisord or similar when
+running multiple processes in a container, as it will forward signals appropriately.
+(https://stackoverflow.com/questions/32255814/what-purpose-does-using-exec-in-docker-entrypoint-scripts-serve/32261019#32261019)
 
 ***************************************************** NGINX *****************************************************
 https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/
@@ -109,6 +133,8 @@ http {
     }
     }
 }
+                                                    check syntax and test file with "nginx -t"
+
 ---------------------------------------------------
     # passing requests to proxied server
     location / {
@@ -156,7 +182,7 @@ Relevant files:
  - /etc/hosts --> add "127.0.0.1 user.42.fr"
  - /etc/nginx/sites-enabled/default
 
-
+---------------------------------------------------
 ..................... SSL/TLS ...........................
 La TLS (ou SSL) fonctionne suivant un mode client-serveur. Il permet de satisfaire les objectifs de sécurité suivants :
 
