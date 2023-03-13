@@ -183,6 +183,13 @@ Relevant files:
  - /etc/nginx/sites-enabled/default
 
 ---------------------------------------------------
+And we start nginx with the "-g daemon off;" arguments to let it run on the foreground and apply the good practice rule of "one container, one process".
+You can also include this option in your .conf file and just run nginx when you start your container.
+
+I had a recurring 'nginx: invalid option: "off;"' error being thrown. If you added the 'exec $@' option at the end of your docker-entrypoint.sh like me,
+you will want to leave your "$@" in quotes like I just did:
+https://github.com/nginxinc/docker-nginx/issues/4#issuecomment-57379836
+
 ..................... SSL/TLS ...........................
 La TLS (ou SSL) fonctionne suivant un mode client-serveur. Il permet de satisfaire les objectifs de sécurité suivants :
 
