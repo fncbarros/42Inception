@@ -1,5 +1,6 @@
 FROM debian:buster
 
-RUN apt update
-RUN apt install -yq wordpress
-RUN apt install -yq mariadb-client
+RUN apt-get update
+RUN apt-get install -yq wordpress mariadb-client \
+&& rm -rf /var/lib/apt/lists/*
+RUN apt-get autoremove
