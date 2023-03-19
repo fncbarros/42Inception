@@ -214,3 +214,51 @@ https://linuxize.com/post/creating-a-self-signed-ssl-certificate/
 ..................... php ...........................
 https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-20-04
 
+
+***************************************************** MARIADB *****************************************************
+mysql_install_db: Initializes the MariaDB data directory and creates the system tables that it
+    contains, if they do not exist.
+    (source script: https://github.com/MariaDB/server/blob/5.5/scripts/mysql_secure_installation.sh)
+
+--user=user_name: The login user name to use for running mysqld. Files and directories created by mysqld will
+        be owned by this user. You must be root to use this option. By default, mysqld runs using
+        your current login name and files and directories that it creates will be owned by you.
+
+Specify the data directory, user and base installation directory: --datadir=/var/lib/mysql --user=mysql --basedir=/usr (e.g.)
+
+You should either run mysql_install_db from the same account that will be used for running mysqld
+    or run it as root and use the --user option to indicate the user name that mysqld will run as.
+
+mysql_secure_installation: Improves MariaDB installation security.
+
+This program lets you:
+    - Set a password for the database “root” user (different from the Linux root user!), which is blank by default;
+    - Delete “anonymous” users, i.e. users with the empty string as user name;
+    - Ensure the root user can not log in remotely;
+    - Remove the database named “test”;
+    - Flush the privileges tables, i.e. ensure that the changes to user access applied in the previous steps are committed immediately.
+
+
+On automating interactive installation: https://bertvv.github.io/notes-to-self/2015/11/16/automating-mysql_secure_installation/
+
+Export database using mysqldump -u<username> -p <dbname> > <name>.sql
+
+Import database using mysql -u<username> -p <existing_dbname> < <import_file>.sql
+
+..................... MySQL shell 101...........................
+Use the source command to load data into the MySQL Server: $> source database.sql
+
+strings of commands should end with ';', otherwise the sql shell will keep waiting to executable
+
+Useful commands :
+(commands don't necessarily need be typed in CAPS)
+    SHOW DATABASES
+    CREATE DATABASE 'mydb';
+    CREATE USER 'myuser'@localhost IDENTIFIED BY 'password';
+    USE 'mydb'; -> selects database
+    GRANT USAGE ON *.* TO 'myuser'@localhost IDENTIFIED BY 'password'; -> Only allow access from localhost 
+    GRANT USAGE ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword'; -> allow access to MySQL server from any other computer on the network
+    GRANT ALL ON `mydb`.* TO 'myuser'@localhost; -> Grant all privileges to a user on a specific database
+    FLUSH PRIVILEGES; -> apply changes to permissions
+    SHOW GRANTS FOR 'myuser'@localhost;
+    DROP USER/DATABASE/etc ...;
