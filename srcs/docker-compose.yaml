@@ -1,7 +1,13 @@
 version: "3"
 
+volumes:
+  database:
+   name: "data"
+  wordpress-php:
+   name: "website"
+
 services:
- database:
+ mariadb:
   container_name: mariadb
   # build: ./requirements/mariadb/
   # image: database:42
@@ -9,6 +15,8 @@ services:
   restart: always
   env_file:
    - .env
+  volumes:
+    - database:/usr/var/
  website:
   container_name: wordpress
   # build: ./requirements/wordpress/
@@ -16,7 +24,9 @@ services:
   image: wordpress
   restart: always
   depends_on:
-   - database
+   - mariadb
+  volumes:
+   - wordpress-php:/var/www/wordpress:ro
  server:
   container_name: nginx
   # build: ./requirements/nginx/
