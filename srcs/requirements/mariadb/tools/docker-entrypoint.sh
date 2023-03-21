@@ -7,13 +7,13 @@ host=localhost
 #host='%'
 
 # Start the secure installation
-<< EOF
-
+cat << EOF | mysql_secure_installation
+"
 Y
 Y
 Y
 Y
-EOF | mysql_secure_installation
+EOF"
 
 # Create database and user with set permissions
 commands="CREATE DATABASE \`${db}\`; \
@@ -21,6 +21,6 @@ commands="CREATE DATABASE \`${db}\`; \
           GRANT USAGE ON *.* TO '${user}'@'${host}'; \
           GRANT ALL ON \`${db}\`.* TO '${user}'@'${host}'; \
           FLUSH PRIVILEGES;"
-echo "${commands}" | /usr/bin/mysql -u root -p
+echo "${commands}" | /usr/bin/mysql -u root
 
 exec "$@"
