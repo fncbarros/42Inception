@@ -45,6 +45,8 @@ machine - they’ll only be accessible to linked services. Only the internal por
     - Remove all unused networks: docker network rm $(docker network ls -q) 2> /dev/null
     - Remove all unused data: docker system prune -a --volumes
 
+    - Check running processes: docker top <container name>
+
 ***************************************************** Dockerfile *****************************************************
 
 ---------------------------------------------------
