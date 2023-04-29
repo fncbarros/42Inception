@@ -1,39 +1,37 @@
 version: "3"
 
-volumes:
-  database:
-   name: "data"
-  wordpress-php:
-   name: "website"
+# volumes:
+#   database:
+#    name: "data"
+#   wordpress-php:
+#    name: "website"
 
 services:
  mariadb:
   container_name: mariadb
-  # build: ./requirements/mariadb/
-  # image: database:42
-  image: mariadb
+  build: ./requirements/mariadb/
+  image: mariadb:42
   restart: always
   env_file:
    - .env
   volumes:
-    - database:/usr/var/
+    - database:/home/fbarros/data/mariadb
  website:
   container_name: wordpress
-  # build: ./requirements/wordpress/
-  # image: website:42
-  image: wordpress
+  build: ./requirements/wordpress/
+  image: wordpress:42
   restart: always
   depends_on:
    - mariadb
-  volumes:
-   - wordpress-php:/var/www/wordpress:ro
+  # volumes:
+  #  - wordpress-php:/home/fbarros/data/wordpress
  server:
   container_name: nginx
-  # build: ./requirements/nginx/
-  # image: server:42
-  image: nginx
+  build: ./requirements/nginx/
+  image: nginx:42
   restart: always
   depends_on:
    - website
-  ports:
-   - "443"
+  # ports:
+  #  - "443"
+

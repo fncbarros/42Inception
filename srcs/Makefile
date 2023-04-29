@@ -6,18 +6,18 @@ $(NAME):
 	docker compose up
 
 clean_containers:
-	docker stop $(docker ps -qa)
-	docker rm $(docker ps -qa)
+	@docker stop $(docker ps -qa)
+	@docker rm $(docker ps -qa)
 
 clean_images:
-	docker rmi -f $(docker images -qa)
+	@docker rmi -f $(docker images -qa)
 
 clean_volumes:
-	docker volume rm $(docker volume ls -q)
+	@docker volume rm $(docker volume ls -q)
 
 clean_networks:
-	docker network rm $(docker network ls -q)
+	@docker network rm $(docker network ls -q)
 
 fclean:
-	docker system prune -a --volumes
+	@docker system prune -a --volumes
 
