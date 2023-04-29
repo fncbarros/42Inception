@@ -14,8 +14,8 @@ services:
   restart: always
   env_file:
    - .env
-  volumes:
-    - database:/home/fbarros/data/mariadb
+  # volumes:
+  #   - database:/home/fbarros/data/mariadb
  website:
   container_name: wordpress
   build: ./requirements/wordpress/

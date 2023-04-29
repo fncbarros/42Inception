@@ -3,7 +3,7 @@ NAME := Inception
 all: $(NAME)
 
 $(NAME):
-	docker compose up
+	docker compose up -f srcs/docker-compose.yaml
 
 clean_containers:
 	@docker stop $(docker ps -qa)
