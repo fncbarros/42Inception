@@ -16,7 +16,7 @@ services:
    - .env
   # volumes:
   #   - database:/home/fbarros/data/mariadb
- website:
+ wordpress:
   container_name: wordpress
   build: ./requirements/wordpress/
   image: wordpress:42
@@ -25,13 +25,13 @@ services:
    - mariadb
   # volumes:
   #  - wordpress-php:/home/fbarros/data/wordpress
- server:
+ nginx:
   container_name: nginx
   build: ./requirements/nginx/
   image: nginx:42
   restart: always
   depends_on:
-   - website
-  # ports:
-  #  - "443"
+   - wordpress
+  ports:
+   - "443:443"
 
