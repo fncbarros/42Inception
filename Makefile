@@ -3,7 +3,7 @@ NAME := Inception
 all: $(NAME)
 
 $(NAME):
-	docker compose up -f srcs/docker-compose.yaml
+	@cd srcs && docker-compose up -d --build
 
 clean_containers:
 	@docker stop $(docker ps -qa)
@@ -20,4 +20,3 @@ clean_networks:
 
 fclean:
 	@docker system prune -a --volumes
-
