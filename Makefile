@@ -7,7 +7,7 @@ up:
 	@docker-compose -f srcs/docker-compose.yaml up -d --build
 
 down:
-	@docker-compose -f srcs/docker-compose-yaml down
+	@docker-compose -f srcs/docker-compose.yaml down
 
 clean_containers:
 	@docker kill $(docker ps -qa)

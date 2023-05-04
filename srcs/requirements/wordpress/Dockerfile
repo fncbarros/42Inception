@@ -2,19 +2,19 @@ FROM debian:buster
 
 WORKDIR /var/www/
 
-RUN apt-get update && \
-    apt-get install -yq wget mariadb-client \
-    php-fpm php-mysql && \
-    apt-get autoremove && \
-    rm -rf /var/lib/apt/lists/*
-RUN wget https://wordpress.org/latest.tar.gz && \
-    tar -xvf latest.tar.gz && \
-    rm -rf latest.tar.gz
+RUN apt-get update \
+    && apt-get install -yq wget mariadb-client \
+    php-fpm php-mysql \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
+RUN wget https://wordpress.org/latest.tar.gz \
+    && tar -xvf latest.tar.gz \
+    && rm -rf latest.tar.gz
 
 COPY conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
-RUN mkdir /run/php/ && \
-    touch /run/php/php7.3-fpm.pid 
+RUN mkdir /run/php/ \
+    && touch /run/php/php7.3-fpm.pid 
 
 RUN chown -R 1000:1000 /var/www
 RUN chmod -R 777 /var/www
