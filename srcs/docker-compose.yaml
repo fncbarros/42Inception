@@ -1,11 +1,5 @@
 version: "3"
 
-volumes:
-  mariadb:
-#    name: "data"
-#   wordpress-php:
-#    name: "website"
-
 services:
  mariadb:
   container_name: mariadb
@@ -15,7 +9,7 @@ services:
   env_file:
    - .env
   volumes:
-    - mariadb:/home/fbarros/data/mariadb
+    - /home/${USER}/data/mariadb:/var/lib/mysql
  wordpress:
   container_name: wordpress
   build: ./requirements/wordpress/
@@ -24,7 +18,7 @@ services:
   depends_on:
    - mariadb
   # volumes:
-  #  - wordpress-php:/home/fbarros/data/wordpress
+  #  - /home/${USER}/data/wordpress:...
  nginx:
   container_name: nginx
   build: ./requirements/nginx/
