@@ -15,5 +15,5 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-# bind to 0.0.0.0 to allow external connection
-CMD ["/etc/init.d/mysql", "start", "--bind=0.0.0.0"]
+# add --bind=0.0.0.0 to allow external connection
+CMD ["/etc/init.d/mysql", "start"]
