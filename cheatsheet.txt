@@ -266,8 +266,14 @@ Useful commands :
     DROP USER/DATABASE/etc ...;
 
 
-
+************************************************* WORDPRESS/PHP-FPM ***********************************************
 To be able to start php-fpm
 mkdir /run/php/
 touch /run/php/php7.3-fpm.pid
 php-fpm7.3 -F -R
+
+
+
+**************************************************** VIRTUAL-BOX ***************************************************
+In the virtual machine, after configuring a shared folder in the settings:
+    sudo mount -t vboxsf <hostm_folder_name> ~/<virtualm_folder_path>

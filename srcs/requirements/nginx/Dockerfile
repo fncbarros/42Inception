@@ -6,7 +6,8 @@ RUN apt-get install -yq nginx openssl \
 RUN apt-get autoremove
 
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-COPY ./conf .
+
+COPY ./conf/default /etc/nginx/sites-enabled/default
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 WORKDIR /etc/nginx
