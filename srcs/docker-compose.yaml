@@ -6,6 +6,11 @@ services:
   build: ./requirements/mariadb/
   image: mariadb:42
   restart: always
+  environment:
+   - MYSQL_DATABASE
+   - MYSQL_USER
+   - MYSQL_PASSWORD
+   - MYSQL_ROOT_PASSWORD
   env_file:
    - .env
   volumes:
@@ -15,6 +20,8 @@ services:
   build: ./requirements/wordpress/
   image: wordpress:42
   restart: always
+  environment:
+   - DOMAIN
   depends_on:
    - mariadb
   # volumes:
@@ -28,4 +35,3 @@ services:
    - wordpress
   ports:
    - "443:443"
-
