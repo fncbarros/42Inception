@@ -1,16 +1,12 @@
 #!/bin/bash
 
-user=$MYSQL_USER
-password=$MYSQL_PASSWORD
-root_password=$MYSQL_ROOT_PASSWORD
-db=$MYSQL_DATABASE
-host='%'
+sed -ie '/bind-address/s/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
 
-# sed -ie '/bind-address/s/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
+chmod -R 755 /var
 
-mysql_install_db --user=mysql
+mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 
-/etc/init.d/mariadb start
+/etc/init.d/mysql start
 
 # Configure mysql and create database and user with set permissions
 # Delete anonymours users
@@ -24,11 +20,11 @@ DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEDGES;
 EOF
 
-mariadb -u root --password=${root_password} << EOF
-CREATE DATABASE \`${db}\`;
-CREATE USER '${user}'@'${host}' IDENTIFIED BY '${password}';
-GRANT ALL ON \`${db}\`.* TO '${user}'@'${host}';
-GRANT USAGE ON *.* TO '${user}'@'${host}';
+mariadb -u root --password=$MYSQL_ROOT_PASSWORD << EOF
+CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
+GRANT USAGE ON *.* TO '$MYSQL_USER'@'%';
 FLUSH PRIVILEDGES;
 EOF
 
