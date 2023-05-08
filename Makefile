@@ -1,3 +1,5 @@
+MARIADB_VOL_DIR := ~/data/mariadb
+WORDPRESS_VOL_DIR := ~/data/wordpress
 
 all: up
 
@@ -6,6 +8,10 @@ up:
 
 down:
 	@docker compose -f srcs/docker-compose.yaml down
+
+create_vol_dirs:
+	@mkdir $(MARIADB_VOL_DIR)
+	@mkdir $(WORDPRESS_VOL_DIR)
 
 clean_containers: down
 	@docker ps --filter status=exited -q | xargs docker rm
@@ -23,5 +29,8 @@ clean: clean_containers clean_images
 
 fclean: down
 	@docker system prune -a --volumes
+	@rm -rf $(MARIADB_VOL_DIR) $(WORDPRESS_VOL_DIR)
 
-.PHONY: all up down clean_containers clean_images clean_volumes clean_networks fclean
+re: fclean up
+
+.PHONY: all up down clean_containers clean_images clean_volumes clean_networks fclean re
