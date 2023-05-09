@@ -16,5 +16,4 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-# add --bind=0.0.0.0 to allow external connection
 CMD ["mysqld_safe"]
