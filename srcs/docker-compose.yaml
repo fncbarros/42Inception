@@ -11,6 +11,7 @@ services:
    - MYSQL_USER
    - MYSQL_PASSWORD
    - MYSQL_ROOT_PASSWORD
+   - LOGIN
   env_file:
    - .env
   volumes:
@@ -21,7 +22,9 @@ services:
   image: wordpress:42
   restart: always
   environment:
-   - DOMAIN
+   - LOGIN
+   - MYSQL_USER
+   - MYSQL_DATABASE
   depends_on:
    - mariadb
   # volumes:
@@ -31,6 +34,8 @@ services:
   build: ./requirements/nginx/
   image: nginx:42
   restart: always
+  environment:
+   - LOGIN
   depends_on:
    - wordpress
   ports:
