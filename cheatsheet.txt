@@ -1,6 +1,7 @@
 ***************************************************** DOCKER-COMPOSE *****************************************************
 
     -> Stop all containers and remove volumes: docker compose down -v
+    -> Rebuild without using cache: docker compose -f srcs/docker-compose.yaml build --no-cache
 
 ---------------------------------------------------
 docker-compose.yml:
