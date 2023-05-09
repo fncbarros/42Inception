@@ -14,7 +14,7 @@ create_vol_dirs:
 	@mkdir $(WORDPRESS_VOL_DIR)
 
 clean_containers: down
-	@docker ps --filter status=exited -q | xargs docker rm
+	@docker container prune
 
 clean_images:
 	@docker image prune -a -f
@@ -25,11 +25,11 @@ clean_volumes:
 clean_networks:
 	@docker network prune
 
-clean: clean_containers clean_images
+clean: down clean_containers clean_images
 
-fclean: down
+fclean: clean
 	@docker system prune -a --volumes
-	@rm -rf $(MARIADB_VOL_DIR) $(WORDPRESS_VOL_DIR)
+	@sudo rm -rf $(MARIADB_VOL_DIR) $(WORDPRESS_VOL_DIR)
 
 re: fclean up
 
