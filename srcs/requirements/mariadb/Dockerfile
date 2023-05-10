@@ -1,9 +1,5 @@
 FROM debian:buster
 
-# RUN apt-get update \
-#     && apt-get install -y apt-transport-https gnupg2 wget
-# RUN wget -O - https://mariadb.org/mariadb_release_signing_key.asc | apt-key add - \
-#     && echo "deb [arch=amd64,arm64,ppc64el] http://mirror.mva-n.net/mariadb/repo/10.5/debian buster main" > /etc/apt/sources.list.d/mariadb.list
 RUN apt-get update \
     && apt-get install -y mariadb-server \
     && apt-get upgrade -y
@@ -18,4 +14,4 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD ["mysqld_safe"]
+CMD ["mysqld_safe", "--bind-address=0.0.0.0", "--datadir='/var/lib/mysql'"]
