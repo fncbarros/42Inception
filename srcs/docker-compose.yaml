@@ -12,8 +12,6 @@ services:
    - MYSQL_PASSWORD
    - MYSQL_ROOT_PASSWORD
    - LOGIN
-  env_file:
-   - .env
   volumes:
     - /home/${USER}/data/mariadb:/var/lib/mysql
  wordpress:
