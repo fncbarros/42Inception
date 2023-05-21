@@ -116,6 +116,10 @@ handling and forwarding signals as appropriate. This is one of the reasons it's 
 running multiple processes in a container, as it will forward signals appropriately.
 (https://stackoverflow.com/questions/32255814/what-purpose-does-using-exec-in-docker-entrypoint-scripts-serve/32261019#32261019)
 
+***************************************************** DOCKER EXTRAS *****************************************************
+On Containers: https://www.youtube.com/watch?v=8fi7uSYlOdc&t=2229s
+On PID1: https://petermalmgren.com/signal-handling-docker/
+
 ***************************************************** NGINX *****************************************************
 https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/
 
