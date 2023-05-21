@@ -14,6 +14,8 @@ services:
    - LOGIN
   volumes:
     - /home/${USER}/data/mariadb:/var/lib/mysql
+  networks:
+   - inception
  wordpress:
   container_name: wordpress
   build: ./requirements/wordpress/
@@ -29,6 +31,8 @@ services:
    - mariadb
   # volumes:
   #  - /home/${USER}/data/wordpress:...
+  networks:
+   - inception
  nginx:
   container_name: nginx
   build: ./requirements/nginx/
@@ -38,5 +42,13 @@ services:
    - LOGIN
   depends_on:
    - wordpress
+  networks:
+   - inception
   ports:
    - "443:443"
+
+
+networks:
+  inception:
+   name: inception
+   driver: bridge
