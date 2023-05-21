@@ -4,10 +4,10 @@ WORDPRESS_VOL_DIR := ~/data/wordpress
 all: up
 
 up:
-	@docker compose -f srcs/docker-compose.yaml up -d --build
+	@docker compose -f srcs/docker-compose.yml up -d --build
 
 down:
-	@docker compose -f srcs/docker-compose.yaml down
+	@docker compose -f srcs/docker-compose.yml down
 
 create_vol_dirs:
 	@mkdir $(MARIADB_VOL_DIR)
