@@ -3,9 +3,10 @@ FROM debian:buster
 WORKDIR /var/www/
 
 RUN apt-get update \
-    && apt-get install -yq wget mariadb-client \
-    php-fpm php-mysql \
-    && apt-get autoremove \
+    && apt-get upgrade -y \
+    && apt-get install -yq wget openssl mariadb-client php php-fpm php-mysqli php-curl php-gd php-xml php-cgi php-http
+
+RUN apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 RUN wget https://wordpress.org/latest.tar.gz \
     && tar -xvf latest.tar.gz \
