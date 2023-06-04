@@ -4,7 +4,7 @@ WORDPRESS_VOL_DIR := ~/data/wordpress
 all: up
 
 up:
-	@docker compose -f srcs/docker-compose.yml up -d --build
+	@docker compose -f srcs/docker-compose.yml --project-name inception up -d --build
 
 down:
 	@docker compose -f srcs/docker-compose.yml down

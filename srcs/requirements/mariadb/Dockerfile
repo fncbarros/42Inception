@@ -16,4 +16,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 WORKDIR /usr
 
-CMD ["/usr/bin/mysqld_safe", "--bind-address=0.0.0.0", "--datadir='/var/lib/mysql'"]
+CMD ["mysqld_safe", "--datadir=/var/lib/mysql"]
