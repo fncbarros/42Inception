@@ -29,8 +29,8 @@ services:
    - MYSQL_DATABASE
   depends_on:
    - mariadb
-  # volumes:
-  #  - /home/${USER}/data/wordpress:...
+  volumes:
+   - wordpress:/var/www/wordpress
   networks:
    - inception
  nginx:
@@ -42,6 +42,8 @@ services:
    - LOGIN
   depends_on:
    - wordpress
+  volumes:
+   - wordpress:/var/www/wordpress
   networks:
    - inception
   ports:
@@ -59,5 +61,12 @@ volumes:
     driver_opts:
       type: none
       device: /home/${USER}/data/mariadb
+      o: bind
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/wordpress
       o: bind
 
