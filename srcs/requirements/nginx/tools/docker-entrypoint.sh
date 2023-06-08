@@ -3,6 +3,8 @@
 # breaking link to default config
 # unlink /etc/nginx/sites-enabled/default # --> replacing default in Dockerfile for now
 
+sed -i "s/LOGIN/$LOGIN/g" /etc/nginx/sites-enabled/default
+
 mkdir /etc/nginx/certs
 # Generate self signed ssl certificate
 openssl req -x509 -nodes -days 365 -subj "/C=PT/ST=Lisbon/O=42Lisboa/CN=${LOGIN}.42.fr" \
