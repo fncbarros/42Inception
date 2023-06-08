@@ -13,7 +13,7 @@ services:
    - MYSQL_ROOT_PASSWORD
    - LOGIN
   volumes:
-    - mariadb:/var/lib/mysql:rw
+    - mariadb:/var/lib/mysql
   networks:
    - inception
  wordpress:

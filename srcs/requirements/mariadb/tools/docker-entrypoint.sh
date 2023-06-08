@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # allow external connection
-sed -ie '/bind-address/s/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
-# sed -ie 's/port/#port/g' /etc/mysql/mariadb.conf.d/50-server.cnf
+# sed -ie '/bind-address/s/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -ie 's/bind-address/#bind-address/g' /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -ie 's/port/#port/g' /etc/mysql/mariadb.conf.d/50-server.cnf
 
 
 # initialize the MySQL data directory and create the system tables if they don't exist yet
@@ -24,7 +25,6 @@ service mysql start
 # Remove test database
 # To unallow root access from  from a host that is not 'localhost', '127.0.0.1', or '::1'
 # DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-# Delete "empty" users
 # DELETE FROM mysql.user WHERE User='';
 # DROP DATABASE IF EXISTS test;
 mysql --user=root << _EOF_
@@ -35,7 +35,7 @@ _EOF_
 
 chown -R mysql:mysql /var/lib/mysql
 
-mysql -u root --password=$MYSQL_ROOT_PASSWORD << _EOF_
+mysql --user=root --password=$MYSQL_ROOT_PASSWORD << _EOF_
 CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
 CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
 GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
@@ -46,9 +46,5 @@ _EOF_
 # Needed to stop service in order to run CMD mysqld in Dockerfile
 service mysql stop
 fi
-
-# TMP
-# tail -f
-# TMP
 
 exec "$@"
