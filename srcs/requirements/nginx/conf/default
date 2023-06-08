@@ -1,6 +1,6 @@
     server {
         listen 443 ssl;
-        root /var/www/wordpress;
+        root /var/www/wordpress/;
         server_name LOGIN.42.fr www.LOGIN.42.fr;
 
         access_log /var/log/nginx/access.log;
@@ -27,7 +27,9 @@
             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
             fastcgi_pass wordpress:9000;
             fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            fastcgi_index index.php;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
+            fastcgi_index /wp-admin/index.php;
             include fastcgi.conf;
+            include fastcgi_params;
         }
 }
