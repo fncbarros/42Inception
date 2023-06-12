@@ -1,17 +1,16 @@
-MARIADB_VOL_DIR := ~/data/mariadb
-WORDPRESS_VOL_DIR := ~/data/wordpress
+VOLUME_DIRS := ~/data/mariadb ~/data/wordpress
 
 all: up
 
-up: create_vol_dirs
+up: $(VOLUME_DIRS)
 	@docker compose -f srcs/docker-compose.yml up -d --build --force-recreate
 
 down:
 	@docker compose -f srcs/docker-compose.yml down
 
-create_vol_dirs:
-	@sudo mkdir -p $(MARIADB_VOL_DIR)
-	@sudo mkdir -p $(WORDPRESS_VOL_DIR)
+$(VOLUME_DIRS):
+	@sudo mkdir -p ~/data/mariadb
+	@sudo mkdir -p ~/data/wordpress
 
 clean_containers: down
 	@docker container prune
@@ -20,17 +19,16 @@ clean_images: down
 	@docker image prune -a -f
 
 clean_volumes: down
-	# @docker volume rm $(docker volume ls -q)
-	@docker volume prune
+	@docker volume rm $(docker volume ls -q)
 
 clean_networks:
 	@docker network prune
 
-clean: down clean_containers clean_images
+clean: down clean_containers
 
 fclean: clean
 	@docker system prune -a --volumes
-	@sudo rm -rf $(MARIADB_VOL_DIR) $(WORDPRESS_VOL_DIR)
+	@sudo rm -rf ~/data/mariadb ~/data/wordpress
 
 re: fclean up
 
