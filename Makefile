@@ -4,11 +4,10 @@ WORDPRESS_VOL_DIR := ~/data/wordpress
 all: up
 
 up: create_vol_dirs
-	@docker compose -f srcs/docker-compose.yml --project-name inception up -d --build
+	@docker compose -f srcs/docker-compose.yml up -d --build --force-recreate
 
 down:
-	docker volume rm $(docker volume ls -q)
-	@docker compose -f srcs/docker-compose.yml down # <---not working for some reason
+	@docker compose -f srcs/docker-compose.yml down
 
 create_vol_dirs:
 	@sudo mkdir -p $(MARIADB_VOL_DIR)
@@ -21,8 +20,8 @@ clean_images: down
 	@docker image prune -a -f
 
 clean_volumes: down
-	@docker volume rm $(docker volume ls -q)
-	# @docker volume prune # <---not working for some reason
+	# @docker volume rm $(docker volume ls -q)
+	@docker volume prune
 
 clean_networks:
 	@docker network prune
