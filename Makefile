@@ -18,8 +18,8 @@ clean_containers: down
 clean_images: down
 	@docker image prune -a -f
 
-clean_volumes: down
-	@docker volume rm $(docker volume ls -q)
+clean_volumes: down $(VOLUME_DIRS)
+	@docker volume rm mariadb wordpress
 
 clean_networks:
 	@docker network prune
