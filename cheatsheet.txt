@@ -277,7 +277,8 @@ mkdir /run/php/
 touch /run/php/php7.3-fpm.pid
 php-fpm7.3 -F -R
 
-
+Installing the wordpress cli:
+https://www.wpoven.com/tutorial/how-to-install-wp-cli-on-your-linux-server/
 
 **************************************************** VIRTUAL-BOX ***************************************************
 In the virtual machine, after configuring a shared folder in the settings:

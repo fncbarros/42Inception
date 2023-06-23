@@ -8,9 +8,14 @@ RUN apt-get update \
 
 RUN apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
+
 RUN wget https://wordpress.org/latest.tar.gz \
     && tar -xvf latest.tar.gz \
     && rm -rf latest.tar.gz
+
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp \
+    && chmod +x /usr/local/bin/wp
 
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
