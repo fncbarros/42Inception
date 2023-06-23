@@ -12,12 +12,20 @@ RUN wget https://wordpress.org/latest.tar.gz \
     && tar -xvf latest.tar.gz \
     && rm -rf latest.tar.gz
 
-COPY conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY ./conf/wp-config.php /var/www/wordpresss/wp-config.php
 
 RUN mkdir /run/php/ \
     && touch /run/php/php7.3-fpm.pid
+    
 
 RUN chown -R 1000:1000 /var/www
 RUN chmod -R 755 /var/www
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["php-fpm7.3", "-F", "-R"]
