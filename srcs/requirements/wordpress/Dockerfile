@@ -4,7 +4,7 @@ WORKDIR /var/www/
 
 RUN apt-get update \
     && apt-get upgrade -yq \
-    && apt-get install -yq wget openssl mariadb-client php php-fpm php-mysqli php-curl php-gd php-xml php-cgi php-http
+    && apt-get install -yq wget openssl mariadb-client php php-fpm php-mysqli php-curl php-gd php-xml php-cgi php-http gettext
 
 RUN apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -24,10 +24,11 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 COPY ./conf/wp-config.php /var/www/wordpress/wp-config.php
 
+RUN rm /var/www/wordpress/wp-config-sample.php
+
 RUN mkdir /run/php/ \
     && touch /run/php/php7.3-fpm.pid
-    
-RUN chown -R 1000:1000 /var/www
+
 RUN chmod -R 755 /var/www
 
 ENTRYPOINT ["docker-entrypoint.sh"]
