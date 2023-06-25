@@ -23,6 +23,7 @@ service mysql start
 # Remove test database
 mysql --user=root << _EOF_
 UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root';
+UPDATE mysql.user SET plugin='mysql_native_password' WHERE user='root' AND host='localhost';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
